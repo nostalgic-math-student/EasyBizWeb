@@ -1,0 +1,10 @@
+.logo-container {
+    background-color: rgba(0, 0, 0, 0.6); /* Black background with 60% opacity */
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+  }
+
+  /* Text shadow example */
+.text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Adds a soft shadow to the text */
+  }
