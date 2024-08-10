@@ -31,7 +31,7 @@ function Scene() {
 
 export default function Animation() {
   return (
-    <div className="fixed inset-0 w-full h-full z-0">
+    <div className="absolute inset-0 w-full h-full z-0">
       <Canvas gl={{ antialias: true }}>
         <Scene />
       </Canvas>
