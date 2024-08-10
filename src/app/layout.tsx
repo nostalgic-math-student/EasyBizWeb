@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import { Roboto } from "next/font/google";
 import { type Metadata } from "next";
+import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -20,7 +21,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={roboto.variable}>
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        <Navbar/>
+        {children}
+        </body>
     </html>
   );
 }
