@@ -1,23 +1,19 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { readContract } from 'wagmi/actions';
-import { abi } from '../contracts/generateTransactionABI';
+import { abi2 } from '../contracts/generateTransactionABI';
 import { getConnectorClient, getConnections } from '@wagmi/core';
 import { config } from '../../config'; // Adjust the path as necessary
 import type { ByteArray } from 'viem';
 import { formatUnits } from 'viem';
 
-  
-
 const MiniPayButton: React.FC = () => {
   const [sellerAddress, setSellerAddress] = useState<string>('');
   const [paymentIds, setPaymentIds] = useState<ByteArray[]>([]);
-  const [paymentDetails, setPaymentDetails] = useState<any[]>([]); // Store the detailed payment data
+  const [paymentDetails, setPaymentDetails] = useState<any[]>([]);
   const [comment, setComment] = useState<string>('');
-  const contractAddress = '0xc7F16a4c321FA2baDA883c10487Ea87Af78afB8e';
+  const contractAddress = '0xdb35b9738C6E58D30d59149910055A561EAA89c6';
   const { address, isConnected } = useAccount();
 
   useEffect(() => {
@@ -54,7 +50,7 @@ const MiniPayButton: React.FC = () => {
       // Fetch active payment IDs
       const paymentIdsResponse: ByteArray[] = await readContract(config,{
         address: contractAddress,
-        abi: abi,
+        abi: abi2,
         functionName: 'getActivePaymentsBySeller',
         args: [sellerAddress],
         client,
@@ -65,27 +61,34 @@ const MiniPayButton: React.FC = () => {
   
       // Fetch details for each payment ID using the payments mapping
       const paymentDetailsPromises = paymentIdsResponse.map(async (paymentId: ByteArray) => {
-        const details: [string, bigint, string, boolean] = await readContract(config,{
-          address: contractAddress,
-          abi: abi,
-          functionName: 'payments',
-          args: [paymentId],
-          client,
-        });
-  
-        const [recipient, amount, description, completed] = details;
-  
-        return {
-          paymentId,
-          recipient,
-          amount: formatUnits(amount, 18), // Format the amount to Ether (or base unit)
-          description,
-          completed,
-        };
+        try {
+          const details: [string, bigint, string, boolean, string] = await readContract(config,{
+            address: contractAddress,
+            abi: abi2,
+            functionName: 'payments',
+            args: [paymentId],
+            client,
+          });
+    
+          const [recipient, amount, description, completed, currency] = details;
+          const formattedAmount = formatUnits(amount, 18); // Format the amount to Ether (or base unit)
+    
+          return {
+            paymentId,
+            recipient,
+            amount: formattedAmount,
+            description,
+            completed,
+            currency,
+          };
+        } catch (err) {
+          console.error(`Failed to fetch details for payment ID ${paymentId}`, err);
+          return null;
+        }
       });
   
       const detailedPayments = await Promise.all(paymentDetailsPromises);
-      setPaymentDetails(detailedPayments);
+      setPaymentDetails(detailedPayments.filter(Boolean)); // Filter out any null values from failed fetches
       setComment(`Payments for seller ${sellerAddress} fetched successfully!`);
     } catch (error) {
       setComment(`${error.toString()}`);
@@ -113,11 +116,11 @@ const MiniPayButton: React.FC = () => {
         {paymentDetails.map((payment, index) => (
           <li key={index} className="mb-2 p-2 border border-gray-300 rounded-md text-black bg-white overflow-hidden text-ellipsis">
             <div className="flex flex-col items-start">
-              <strong className="truncate w-full">Payment ID:</strong> <span className="truncate">{payment.paymentId}</span>
-              <strong className="truncate w-full">Recipient:</strong> <span className="truncate">{payment.recipient || 'N/A'}</span>
-              <strong className="truncate w-full">Amount:</strong> <span className="truncate">{payment.amount} CELO</span>
-              <strong className="truncate w-full">Description:</strong> <span className="truncate">{payment.description || 'N/A'}</span>
-              <strong className="truncate w-full">Completed:</strong> <span>{payment.completed ? 'Yes' : 'No'}</span>
+              <strong className=" justify-center">Payment ID:</strong> <span className="justify-center">{payment.paymentId}</span>
+              <strong className=" justify-center">Recipient:</strong> <span className="justify-center">{payment.recipient || 'N/A'}</span>
+              <strong className=" justify-center">Amount:</strong> <span className="justify-center">{payment.amount} {payment.currency}</span>
+              <strong className=" justify-center">Description:</strong> <span className="justify-center">{payment.completed || 'N/A'}</span>
+              <strong className=" justify-center">Completed:</strong> <span>{payment.description ? 'Yes' : 'No'}</span>
             </div>
           </li>
         ))}

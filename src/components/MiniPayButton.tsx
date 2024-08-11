@@ -1,20 +1,18 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { writeContract } from 'wagmi/actions';
 import { parseUnits } from 'viem';
-import { abi } from '../contracts/generateTransactionABI';
+import { abi2 } from '../contracts/generateTransactionABI';
 import { getConnectorClient, getConnections } from '@wagmi/core';
 import { config } from '../../config'; // Adjust the path as necessary
-
 
 const MiniPayButton: React.FC = () => {
   const [amount, setAmount] = useState<string>('');
   const [description, setDescription] = useState<string>(''); // Updated to be an empty string initially
+  const [currency, setCurrency] = useState<string>('CELO'); // Default currency set to CELO
   const [comment, setComment] = useState<string>('');
-  const contractAddress = '0xc7F16a4c321FA2baDA883c10487Ea87Af78afB8e';
+  const contractAddress = '0xdb35b9738C6E58D30d59149910055A561EAA89c6';
   const { address, isConnected } = useAccount();
   
   useEffect(() => {
@@ -53,9 +51,9 @@ const MiniPayButton: React.FC = () => {
       const response = await writeContract(config, {
         account: address, // Pass the client here
         address: contractAddress,
-        abi: abi,
+        abi: abi2,
         functionName: 'createPayment',
-        args: [address, amountInWei, description], // Use the description state
+        args: [address, amountInWei, description, currency], // Added currency as an argument
         client,
       });
   
@@ -83,6 +81,14 @@ const MiniPayButton: React.FC = () => {
         placeholder="Enter Description"
         className="mb-2 p-2 border border-gray-300 rounded-md text-black w-full max-w-xs"
       />
+      <select
+        value={currency}
+        onChange={(e) => setCurrency(e.target.value)}
+        className="mb-2 p-2 border border-gray-300 rounded-md text-black w-full max-w-xs"
+      >
+        <option value="CELO">CELO</option>
+        <option value="cUSD">cUSD</option>
+      </select>
       <button
         onClick={handlePaymentRequest}
         className="bg-blue-500 text-black p-2 rounded-md hover:bg-blue-700 w-full max-w-xs"

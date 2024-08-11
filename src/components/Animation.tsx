@@ -19,7 +19,7 @@ const RotatingTorus = () => {
 
   return (
     <mesh ref={ref}>
-      <torusKnotGeometry args={[1.3, 0.55, 120, 20]} />
+      <torusKnotGeometry args={[1.1, 0.45, 120, 20]} />
       <meshBasicMaterial wireframe color={color} />
     </mesh>
   );

@@ -1,8 +1,8 @@
-export const abi =[
+export const abi2 = [
 	{
 		"inputs": [
 			{
-				"internalType": "address payable",
+				"internalType": "address",
 				"name": "_recipient",
 				"type": "address"
 			},
@@ -14,6 +14,11 @@ export const abi =[
 			{
 				"internalType": "string",
 				"name": "_description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_currency",
 				"type": "string"
 			}
 		],
@@ -42,7 +47,13 @@ export const abi =[
 		"type": "function"
 	},
 	{
-		"inputs": [],
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_cUSD",
+				"type": "address"
+			}
+		],
 		"stateMutability": "payable",
 		"type": "constructor"
 	},
@@ -116,6 +127,19 @@ export const abi =[
 		"type": "event"
 	},
 	{
+		"inputs": [],
+		"name": "cUSD",
+		"outputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -158,7 +182,7 @@ export const abi =[
 		"name": "payments",
 		"outputs": [
 			{
-				"internalType": "address payable",
+				"internalType": "address",
 				"name": "recipient",
 				"type": "address"
 			},
@@ -168,14 +192,19 @@ export const abi =[
 				"type": "uint256"
 			},
 			{
+				"internalType": "bool",
+				"name": "completed",
+				"type": "bool"
+			},
+			{
 				"internalType": "string",
 				"name": "description",
 				"type": "string"
 			},
 			{
-				"internalType": "bool",
-				"name": "completed",
-				"type": "bool"
+				"internalType": "string",
+				"name": "currency",
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",

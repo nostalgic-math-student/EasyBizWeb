@@ -3,17 +3,19 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
-import { writeContract } from 'wagmi/actions';
-import { abi } from '../contracts/generateTransactionABI';
-import { parseUnits } from 'viem';
+import { abi as erc20Abi } from '@openzeppelin/contracts/build/contracts/IERC20.json';
+import { writeContract, readContract } from 'wagmi/actions';
+import { abi2 } from '../contracts/generateTransactionABI';
+import { parseUnits, keccak256, stringToBytes } from 'viem';
 import { getConnectorClient, getConnections } from '@wagmi/core';
 import { config } from '../../config'; // Adjust the path as necessary
+import { approveCUSD } from '@/celo/approvecUSD';
 
 const FulfillPaymentButton: React.FC = () => {
   const [paymentId, setPaymentId] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
   const [comment, setComment] = useState<string>('');
-  const contractAddress = '0xc7F16a4c321FA2baDA883c10487Ea87Af78afB8e';
+  const contractAddress = '0xdb35b9738C6E58D30d59149910055A561EAA89c6';
   const { address, isConnected } = useAccount();
 
   useEffect(() => {
@@ -24,48 +26,42 @@ const FulfillPaymentButton: React.FC = () => {
     }
   }, [isConnected, address]);
 
+  // Manejo de aprobación y cumplimiento del pago
   const handleFulfillPayment = async () => {
     try {
-      if (!window.ethereum) {
-        console.error('Ethereum provider not found');
-        return;
-      }
-
-      const amountInWei = parseUnits(amount, 18); // Convert the amount to wei
-  
-      // Get the client using getConnectorClient
-      const connections = getConnections(config);
-      const client = await getConnectorClient(config, {
-        connector: connections[0]?.connector,
-      });
-
-      if (!client) {
-        console.error('Client not found');
-        return;
-      }
-
       if (!paymentId || !amount) {
-        console.error('Payment ID or amount is missing');
-        setComment('Please enter both Payment ID and amount.');
+        setComment('Please enter both Payment ID and Amount.');
         return;
       }
 
-      // Call fulfillPayment function
-      const response = await writeContract(config,{
-        account: address,
+      const amountInWei = parseUnits(amount, 18);
+
+      // Verificar la asignación actual (allowance)
+      const allowance = await readContract(config, {
+        address: "0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B", // Dirección del cUSD
+        abi: erc20Abi,
+        functionName: 'allowance',
+        args: [address, contractAddress],
+      });
+      console.log(allowance,amountInWei,"measures")
+      if (allowance < amountInWei) {
+        // Aprobar contrato para gastar cUSD si es necesario
+        await approveCUSD(address, amountInWei)
+      }
+      //Cumplir con el pago
+      const response = await writeContract(config, {
         address: contractAddress,
-        abi: abi,
+        abi: abi2,
         functionName: 'fulfillPayment',
         args: [paymentId],
-        value: amountInWei,
-        client,
+        account: address,
       });
 
       console.log('Payment Fulfilled:', response);
       setComment('Payment Fulfilled Successfully!');
     } catch (error) {
-      setComment(`Payment Fulfillment Failed: ${error.toString()}`);
-      console.error('Payment Fulfillment Failed:', error);
+      setComment(`Fulfillment Failed: ${error.toString()}`);
+      console.error('Fulfillment Failed:', error);
     }
   };
 

@@ -40,13 +40,12 @@ export default function HomePage() {
   }, [address]);
 
   return (
-    <main className="relative flex flex-col items-center justify-start bg-gradient-to-b from-[#0D1B2A] from-30% via-[#189ab4] via-40% to-[#B45D00] to-90% text-white min-h-screen">
+    <main className="relative flex flex-col items-center justify-start bg-gradient-to-b from-[#189ab477] from-30% via-[#189ab4]  to-[#B45D00] to-90% text-white min-h-screen">
       {/* Section 1: Animation and Main Heading */}
       <section className="relative flex flex-col items-center justify-center min-h-screen w-full">
         <div className="z-10 text-center">
           <h1 className="text-shadow text-3xl text-white mb-8">
-            Future of Payments occurs{" "}
-            <span className="font-extrabold text-[hsl(180,100%,50%)]">NOW</span>
+          Easy<span className="text-[#0D1B2A] font-bold">Biz</span>
           </h1>
         </div>
         <div className="absolute inset-0 z-0">
