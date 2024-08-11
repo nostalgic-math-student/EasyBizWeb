@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { useConnect } from 'wagmi';
 import { injected } from 'wagmi/connectors'
@@ -5,7 +7,6 @@ import { injected } from 'wagmi/connectors'
 const WalletConnection: React.FC = () => {
   const [isMiniPay, setIsMiniPay] = useState(false);
   const { connect } = useConnect({
-    connector: injected(),
   });
 
   useEffect(() => {

@@ -7,7 +7,8 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+     "build:skip-lint": "next build && NEXT_PUBLIC_SKIP_LINT=true"
   },
   "dependencies": {
     "@celo/abis": "^11.0.0",

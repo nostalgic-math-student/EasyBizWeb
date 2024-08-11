@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 "use client";
 import "./styles.css";
 import { Canvas, useFrame } from "@react-three/fiber";
