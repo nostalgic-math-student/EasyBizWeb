@@ -3,11 +3,13 @@ import { celo, celoAlfajores } from 'wagmi/chains'
 import { injected } from 'wagmi/connectors'
 
 export const config = createConfig({
-  chains: [celo, celoAlfajores],
+  chains: [celoAlfajores],
   ssr: true,
   connectors: [injected()],
   transports: {
-    [celo.id]: http(),
-    [celoAlfajores.id]: http(),
+    [celoAlfajores.id]: http("https://alfajores-forno.celo-testnet.org"),
   },
+  
 })
+
+export default config;

@@ -4,6 +4,7 @@ import { WagmiProvider } from "wagmi";
 import { config } from "config";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Navbar from "@/components/Navbar";
+import WalletConnection from "@/celo/WalletConnection";
 
 export function Providers({ children }: Readonly<{ children: React.ReactNode }>) {
   const queryClient = new QueryClient();
@@ -19,6 +20,7 @@ export function Providers({ children }: Readonly<{ children: React.ReactNode }>)
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <Navbar />
+        <WalletConnection/>
         {children}
       </QueryClientProvider>
     </WagmiProvider>
