@@ -22,7 +22,6 @@ export function Providers({ children }: Readonly<{ children: React.ReactNode }>)
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <Navbar />
-        <WalletConnection/>
         {children}
       </QueryClientProvider>
     </WagmiProvider>

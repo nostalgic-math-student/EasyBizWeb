@@ -18,7 +18,7 @@ const WalletConnection: React.FC = () => {
   }, [connect]);
 
   return (
-    <div>
+    <div className='mamarre'>
       {/* Conditional rendering of Connect Wallet button */}
       {!isMiniPay && (
         <button onClick={() => connect({ connector: injected() })}>
