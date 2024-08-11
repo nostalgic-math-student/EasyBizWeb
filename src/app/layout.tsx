@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 import { Roboto } from "next/font/google";
 import { type Metadata } from "next";
-import Navbar from "@/components/Navbar";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -9,22 +9,27 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-// Importing the Roboto font with different weights
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["400", "500", "700"], // Add weights as needed
   variable: "--font-roboto",
 });
 
+
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={roboto.variable}>
-      <body className="font-sans">
-        <Navbar/>
-        {children}
-        </body>
-    </html>
+
+        <html lang="en">
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <body className="font-sans">
+            <Providers>
+            {children}
+            </Providers>
+          </body>
+        </html>
+
   );
 }

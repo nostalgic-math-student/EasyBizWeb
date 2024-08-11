@@ -1,6 +1,28 @@
+"use client"
+import { useState, useEffect } from "react";
 import Animation from "@/components/Animation";
+import { useConnect, useAccount } from "wagmi";
+import { createWalletClient, custom } from "viem";
+import { celoAlfajores } from "viem/chains";
 
 export default function HomePage() {
+
+  const { connect } = useConnect()
+  const account = useAccount();
+  const [Flag, setFlag] = useState("")
+  
+  useEffect(() => {
+    const client = createWalletClient({
+      chain: celoAlfajores,
+      // chain: celoAlfajores, // For Celo Testnet
+      transport: custom(window.ethereum),
+    });
+
+  }
+, []);
+
+  
+
   return (
     <main className="relative flex flex-col items-center justify-start bg-gradient-to-b from-[#0D1B2A] from-30% via-[#189ab4] via-40% to-[#B45D00] to-90% text-white min-h-screen">
 
@@ -28,6 +50,12 @@ export default function HomePage() {
         <button className="btn btn-secondary">
           Start Payment
         </button>
+        { account.address && (
+          <>
+            <p className="mt-4 text-lg">Connected with address: {account.address}</p>
+          </>
+          )}
+
       </section>
 
       {/* Section 3: Content Block 2 */}
