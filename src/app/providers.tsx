@@ -19,10 +19,6 @@ export function Providers({ children }: Readonly<{ children: React.ReactNode }>)
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <Navbar />
-        <div>
-            si
-        {isMiniPay? "true" : "nel"}
-        </div>
         {children}
       </QueryClientProvider>
     </WagmiProvider>
