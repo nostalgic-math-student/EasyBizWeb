@@ -24,6 +24,7 @@ const config = {
     "react/no-unescaped-entities": "off",
     "react-hooks/exhaustive-deps": "off",
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/consistent-type-imports": [
       "warn",

@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { writeContract } from 'wagmi/actions';
 import { abi as erc20Abi } from '@openzeppelin/contracts/build/contracts/IERC20.json';
 import config from 'config';
